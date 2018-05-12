@@ -277,7 +277,7 @@ public class MyCGMActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 Log.e("Authorize", "Error Parsing Http response " + e.getLocalizedMessage());
             } catch (JSONException e) {
-                Log.e("Authorize", "Error Parsing Http response " + e.getLocalizedMessage());
+                Log.e("Authorize", "Error with Http response " + e.getLocalizedMessage());
             }
 
             return false;
