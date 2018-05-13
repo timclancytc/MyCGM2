@@ -1,8 +1,8 @@
 package projects.tmc.mycgm2;
 
+import android.annotation.SuppressLint;
 import android.net.ParseException;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 
 import java.io.IOException;
@@ -11,7 +11,6 @@ import java.util.Calendar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -76,6 +75,7 @@ public class MyCGMActivity extends AppCompatActivity {
     private WebView webView;
     private ProgressDialog pd;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -85,7 +85,7 @@ public class MyCGMActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_cgm);
 
         //get the webView from the layout
-        webView = (WebView) findViewById(R.id.main_activity_web_view);
+        webView = findViewById(R.id.main_activity_web_view);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
@@ -266,7 +266,7 @@ public class MyCGMActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putLong("expires", expireDate);
                             editor.putString("accessToken", accessToken);
-                            editor.commit();
+                            editor.apply();
 
                             return true;
                         }
@@ -296,6 +296,4 @@ public class MyCGMActivity extends AppCompatActivity {
         }
 
     }
-
-    ;
 }

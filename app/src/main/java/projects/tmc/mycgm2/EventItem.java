@@ -2,10 +2,12 @@ package projects.tmc.mycgm2;
 
 import java.util.Date;
 
-class CalibrationItem {
+class EventItem {
 
     private Date mSystemTime;
     private Date mDisplayTime;
+    private String mEventType;
+    private String mEventSubType;
     private float mValue;
     private String mUnit;
 
@@ -23,6 +25,22 @@ class CalibrationItem {
 
     public void setDisplayTime(Date displayTime) {
         mDisplayTime = displayTime;
+    }
+
+    public String getEventType() {
+        return mEventType;
+    }
+
+    public void setEventType(String eventType) {
+        mEventType = eventType;
+    }
+
+    public String getEventSubType() {
+        return mEventSubType;
+    }
+
+    public void setEventSubType(String eventSubType) {
+        mEventSubType = eventSubType;
     }
 
     public float getValue() {

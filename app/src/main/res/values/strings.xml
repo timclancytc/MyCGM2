@@ -5,6 +5,6 @@
     <string name="welcome_text">Welcome %1$s %2$s, You are a %3$s</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_calibrations">Calibrations</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_events">Events</string>
     <string name="title_notifications">Notifications</string>
 </resources>

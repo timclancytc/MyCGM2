@@ -19,12 +19,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-class CalibrationFetcher {
+class EventFetcher {
 
-    private static final String TAG = "CalibrationFetcher";
+    private static final String TAG = "EventFetcher";
 
-    public List<CalibrationItem> fetchItems(Request request) {
-        List<CalibrationItem> items = new ArrayList<>();
+    public List<EventItem> fetchItems(Request request) {
+        List<EventItem> items = new ArrayList<>();
         OkHttpClient httpClient = new OkHttpClient();
 
         try {
@@ -36,7 +36,7 @@ class CalibrationFetcher {
 
                     Log.i(TAG, "resultString in try: " + result);
                     JSONObject jsonBody = new JSONObject(result);
-                    calibrationsParser(items, jsonBody);
+                    eventsParser(items, jsonBody);
                 }
             }
         } catch (IOException e) {
@@ -52,33 +52,35 @@ class CalibrationFetcher {
         return items;
     }
 
-    public void calibrationsParser(List<CalibrationItem> items, JSONObject jsonBody)
+
+    private void eventsParser(List<EventItem> items, JSONObject jsonBody)
             throws JSONException, ParseException {
 
         Log.i(TAG, "JSON String:" + jsonBody);
 
-        JSONArray calibrationsJsonArray = jsonBody.getJSONArray("calibrations");
+        JSONArray eventsJsonArray = jsonBody.getJSONArray("events");
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.US);
 
-        for (int i = 0; i < calibrationsJsonArray.length(); i++) {
-            JSONObject calibrationJsonObject = calibrationsJsonArray.getJSONObject(i);
+        for (int i = 0; i < eventsJsonArray.length(); i++) {
+            JSONObject eventJsonObject = eventsJsonArray.getJSONObject(i);
 
-            CalibrationItem item = new CalibrationItem();
+            EventItem item = new EventItem();
 
-            String systemDateString = calibrationJsonObject.getString("systemTime");
+            String systemDateString = eventJsonObject.getString("systemTime");
             Date date = simpleDateFormat.parse(systemDateString);
             item.setSystemTime(date);
+
 
             //Display date is saved as the current time on the system when the reading is entered
             //There is therefore no way to convert it, since it can't be known which timezone it was
             //entered in...
-            String displayDateString = calibrationJsonObject.getString("displayTime");
+            String displayDateString = eventJsonObject.getString("displayTime");
             date = simpleDateFormat.parse(displayDateString);
             item.setDisplayTime(date);
 
-            item.setUnit(calibrationJsonObject.getString("unit"));
-            item.setValue(calibrationJsonObject.getInt("value"));
+            item.setUnit(eventJsonObject.getString("unit"));
+            item.setValue(eventJsonObject.getInt("value"));
 
             items.add(item);
         }
