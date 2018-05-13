@@ -1,0 +1,36 @@
+{
+  "events": [
+    {
+      "systemTime": "2017-06-16T19:45:00",
+      "displayTime": "2017-06-16T11:45:00",
+      "eventType": "exercise",
+      "eventSubType": "medium",
+      "value": 42,
+      "unit": "minutes"
+    },
+    {
+      "systemTime": "2017-06-16T18:57:00",
+      "displayTime": "2017-06-16T10:57:00",
+      "eventType": "insulin",
+      "eventSubType": null,
+      "value": 1.25,
+      "unit": "units"
+    },
+    {
+      "systemTime": "2017-06-16T18:53:00",
+      "displayTime": "2017-06-16T10:53:00",
+      "eventType": "carbs",
+      "eventSubType": null,
+      "value": 32,
+      "unit": "grams"
+    },
+    {
+      "systemTime": "2017-06-16T17:18:00",
+      "displayTime": "2017-06-16T09:18:00",
+      "eventType": "health",
+      "eventSubType": "lowSymptoms",
+      "value": null,
+      "unit": null
+    }
+  ]
+}

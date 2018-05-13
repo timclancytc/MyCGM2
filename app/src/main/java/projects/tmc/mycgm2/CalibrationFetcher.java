@@ -1,102 +1,88 @@
 package projects.tmc.mycgm2;
 
-import android.net.Uri;
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class CalibrationFetcher {
 
     private static final String TAG = "CalibrationFetcher";
-    private static final String API_KEY = "59b41311fbcccd7521629930b8f86282";
 
-    public byte[] getUrlBytes(String urlSpec) throws IOException {
-        URL url = new URL(urlSpec);
-
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            InputStream in = connection.getInputStream();
-
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new IOException(connection.getResponseMessage() + ": with" + urlSpec);
-            }
-
-            int bytesRead = 0;
-            byte[] buffer = new byte[1024];
-            while ((bytesRead = in.read(buffer)) > 0) {
-                out.write(buffer, 0, bytesRead);
-            }
-            out.close();
-            return out.toByteArray();
-        } finally {
-            connection.disconnect();
-        }
-    }
-
-    public List<CalibrationItem> fetchItems() {
+    public List<CalibrationItem> fetchItems(Request request) {
         List<CalibrationItem> items = new ArrayList<>();
+        OkHttpClient httpClient = new OkHttpClient();
 
         try {
-            String url = Uri.parse("https://api.flickr.com/services/rest/")
-                    .buildUpon()
-                    .appendQueryParameter("method", "flickr.photos.search")
-                    .appendQueryParameter("api_key", API_KEY)
-                    .appendQueryParameter("tags", "fujifilm")
-                    .appendQueryParameter("has_geo", "1")
-                    .appendQueryParameter("format", "json")
-                    .appendQueryParameter("nojsoncallback", "1")
-                    .appendQueryParameter("extras", "url_s,geo")
-                    .build().toString();
-            String jsonString = getUrlString(url);
-            Log.i(TAG, "Received JSON: " + jsonString);
-            JSONObject jsonBody = new JSONObject(jsonString);
-            parseItems(items, jsonBody);
-        } catch (IOException ioe) {
-            Log.e(TAG, "Failed to fetch items", ioe);
-        } catch (JSONException je) {
-            Log.e(TAG, "Failed to parse JSON", je);
+            Response response = httpClient.newCall(request).execute();
+            if (response != null) {
+                //If status is OK 200
+                if (response.isSuccessful()) {
+                    String result = Objects.requireNonNull(response.body()).string();
+
+                    Log.i(TAG, "resultString in try: " + result);
+                    JSONObject jsonBody = new JSONObject(result);
+                    calibrationsParser(items, jsonBody);
+                }
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "IO Exception:" + e.getLocalizedMessage());
+            e.printStackTrace();
+        } catch (JSONException e) {
+            Log.e(TAG, "JSON Exception " + e.getLocalizedMessage());
+            e.printStackTrace();
         } catch (ParseException e) {
+            Log.e(TAG, "Parse Exception " + e.getLocalizedMessage());
             e.printStackTrace();
         }
-
         return items;
     }
 
-    private String getUrlString(String url) throws IOException {
-        return new String(getUrlBytes(url));
-    }
 
-    public void parseItems(List<CalibrationItem> items, JSONObject jsonBody)
+    @TargetApi(Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void calibrationsParser(List<CalibrationItem> items, JSONObject jsonBody)
             throws JSONException, ParseException {
-        JSONObject photosJsonObject = jsonBody.getJSONObject("photos");
-        JSONArray photoJsonArray = photosJsonObject.getJSONArray("photo");
 
-        for (int i = 0; i < photoJsonArray.length(); i++) {
-            JSONObject calibrationJsonObject = photoJsonArray.getJSONObject(i);
+        Log.i(TAG, "JSON String:" + jsonBody);
+
+        JSONArray calibrationsJsonArray = jsonBody.getJSONArray("calibrations");
+
+        for (int i = 0; i < calibrationsJsonArray.length(); i++) {
+            JSONObject calibrationJsonObject = calibrationsJsonArray.getJSONObject(i);
+
             CalibrationItem item = new CalibrationItem();
+
             String systemDateString = calibrationJsonObject.getString("systemTime");
-            item.setSystemTime(DateFormat.getDateInstance().parse(systemDateString));
+            Instant instant = Instant.parse(systemDateString);
+            item.setSystemTime(java.util.Date.from(instant));
+
             String displayDateString = calibrationJsonObject.getString("displayTime");
-            item.setDisplayTime(DateFormat.getDateInstance().parse(displayDateString));
+            instant = Instant.parse(displayDateString);
+            item.setDisplayTime(java.util.Date.from(instant));
+
             item.setUnit(calibrationJsonObject.getString("unit"));
             item.setValue(calibrationJsonObject.getInt("value"));
 
             items.add(item);
-
         }
     }
 }
+

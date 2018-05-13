@@ -1,0 +1,16 @@
+{
+  "calibrations":[
+    {
+      "systemTime": "2017-06-17T03:59:11",
+      "displayTime": "2017-06-16T19:59:11",
+      "unit": "mg/dL",
+      "value": 124
+    },
+    {
+      "systemTime": "2017-06-16T16:03:28",
+      "displayTime": "2017-06-16T08:03:28",
+      "unit": "mg/dL",
+      "value": 86
+    }
+  ]
+}

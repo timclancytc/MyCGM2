@@ -43,7 +43,7 @@ public class CalibrationsFragment extends Fragment {
 
     private static final String TAG = "CalibrationsFragment";
     private RecyclerView mRecyclerView;
-    private List<CalibrationItem> mCalibrationItems;
+    private List<CalibrationItem> mItems = new ArrayList<>();
 
     public static CalibrationsFragment newInstance() {
         return new CalibrationsFragment();
@@ -87,10 +87,9 @@ public class CalibrationsFragment extends Fragment {
     }
 
 
-
     private void setupAdapter() {
         if (isAdded()) {
-            mRecyclerView.setAdapter(new CalibrationAdapter(mCalibrationItems));
+            mRecyclerView.setAdapter(new CalibrationAdapter(mItems));
         }
     }
 
@@ -135,11 +134,11 @@ public class CalibrationsFragment extends Fragment {
     }
 
     private static final String getCalibrationsURL() {
-        String startDate = "2018-01-01T08:00:00";
+        String startDate = "2018-03-01T08:00:00";
         String endDate = "2018-05-12T08:00:00";
         return CALIBRATIONS_URL +
                 QUESTION_MARK +
-                "starDate=" + startDate +
+                "startDate=" + startDate +
                 AMPERSAND +
                 "endDate=" + endDate;
     }
@@ -154,66 +153,20 @@ public class CalibrationsFragment extends Fragment {
 
         @Override
         protected List<CalibrationItem> doInBackground(Request... requests) {
-            if (requests.length > 0) {
-                Request request = requests[0];
-                OkHttpClient httpClient = new OkHttpClient();
-
-                try {
-                    Response response = httpClient.newCall(request).execute();
-                    if (response != null) {
-                        //If status is OK 200
-                        if (response.isSuccessful()) {
-                            String result = response.body().string();
-
-                            return calibrationsParser(result);
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
-                } catch (JSONException e) {
-                    Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
+            Request request = requests[0];
+            return new CalibrationFetcher().fetchItems(request);
         }
 
         @Override
         protected void onPostExecute(List<CalibrationItem> calibrationItems) {
-            mCalibrationItems = calibrationItems;
+            mItems = calibrationItems;
             if (pd != null && pd.isShowing()) {
                 pd.dismiss();
             }
             setupAdapter();
         }
 
-        private List<CalibrationItem> calibrationsParser(String result)
-                throws JSONException, ParseException {
 
-            Log.i(TAG, "JSON String:" + result);
-            JSONObject jsonBody = new JSONObject(result);
-            JSONObject calibrationsJsonObject = jsonBody.getJSONObject("calibrations");
-            JSONArray calibrationsJsonArray = calibrationsJsonObject.getJSONArray("");
-
-            List<CalibrationItem> list = new ArrayList<>();
-
-            for (int i = 0; i < calibrationsJsonArray.length(); i++) {
-                JSONObject calibrationJsonObject = calibrationsJsonArray.getJSONObject(i);
-
-                CalibrationItem item = new CalibrationItem();
-                String systemDateString = calibrationJsonObject.getString("systemTime");
-                item.setSystemTime(DateFormat.getDateInstance().parse(systemDateString));
-                String displayDateString = calibrationJsonObject.getString("displayTime");
-                item.setDisplayTime(DateFormat.getDateInstance().parse(displayDateString));
-                item.setUnit(calibrationJsonObject.getString("unit"));
-                item.setValue(calibrationJsonObject.getInt("value"));
-
-                list.add(item);
-            }
-
-            return list;
-        }
 
 
     }
