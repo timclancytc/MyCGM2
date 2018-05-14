@@ -25,7 +25,7 @@ import java.util.TimeZone;
 import okhttp3.Request;
 
 public class EGVSFragment extends Fragment {
-    private static final String EVENT_URL = "https://api.dexcom.com/v1/users/self/egvss";
+    private static final String EVENT_URL = "https://api.dexcom.com/v1/users/self/egvs";
     private static final String QUESTION_MARK = "?";
     private static final String EQUALS = "=";
     private static final String AMPERSAND = "&";
@@ -89,11 +89,13 @@ public class EGVSFragment extends Fragment {
     private class EGVSHolder extends RecyclerView.ViewHolder {
         private final TextView mEGVSValueTextView;
         private final TextView mEGVSDateTextView;
+        private final TextView mEGVSStatus;
 
         EGVSHolder(View itemView) {
             super(itemView);
             mEGVSValueTextView = itemView.findViewById(R.id.egvs_value_text_view);
             mEGVSDateTextView = itemView.findViewById(R.id.egvs_date_text_view);
+            mEGVSStatus = itemView.findViewById(R.id.egvs_stagus);
         }
 
         void bind(EGVSItem egvsItem) {
@@ -103,6 +105,7 @@ public class EGVSFragment extends Fragment {
 
             mEGVSValueTextView.setText(Float.toString(egvsItem.getValue()));
             mEGVSDateTextView.setText(dateFormat.format(egvsItem.getSystemTime()));
+            mEGVSStatus.setText(egvsItem.getStatus());
         }
     }
 
@@ -134,7 +137,7 @@ public class EGVSFragment extends Fragment {
     }
 
     private static String getEGVSURL() {
-        String startDate = "2018-03-01T08:00:00";
+        String startDate = "2018-05-01T08:00:00";
         String endDate = "2018-05-12T08:00:00";
         return  EVENT_URL +
                 QUESTION_MARK +

@@ -36,7 +36,7 @@ class EGVSFetcher {
 
                     Log.i(TAG, "resultString in try: " + result);
                     JSONObject jsonBody = new JSONObject(result);
-                    egvssParser(items, jsonBody);
+                    egvsParser(items, jsonBody);
                 }
             }
         } catch (IOException e) {
@@ -52,17 +52,18 @@ class EGVSFetcher {
         return items;
     }
 
-    public void egvssParser(List<EGVSItem> items, JSONObject jsonBody)
+    public void egvsParser(List<EGVSItem> items, JSONObject jsonBody)
             throws JSONException, ParseException {
 
         Log.i(TAG, "JSON String:" + jsonBody);
 
-        JSONArray egvssJsonArray = jsonBody.getJSONArray("egvss");
+        //TODO parse to get array
+        JSONArray egvsJsonArray = jsonBody.getJSONArray("egvs");
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.US);
 
-        for (int i = 0; i < egvssJsonArray.length(); i++) {
-            JSONObject egvsJsonObject = egvssJsonArray.getJSONObject(i);
+        for (int i = 0; i < egvsJsonArray.length(); i++) {
+            JSONObject egvsJsonObject = egvsJsonArray.getJSONObject(i);
 
             EGVSItem item = new EGVSItem();
 
@@ -78,6 +79,10 @@ class EGVSFetcher {
             item.setDisplayTime(date);
 
             item.setValue(egvsJsonObject.getInt("value"));
+
+            item.setStatus(egvsJsonObject.getString("status"));
+            item.setTrend(egvsJsonObject.getString("trend"));
+            item.setValue(egvsJsonObject.getInt("trendRate"));
 
             items.add(item);
         }
