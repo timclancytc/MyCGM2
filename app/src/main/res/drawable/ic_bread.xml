@@ -1,0 +1,19 @@
+<vector android:height="24dp" android:viewportHeight="480"
+    android:viewportWidth="480" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M64,48h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M192,48h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M320,48h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M128,112h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M256,112h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M192,208h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M88,272h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M312,208h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M256,256h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M192,336h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M256,392h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M192,368h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M104,416h16v16h-16z"/>
+    <path android:fillColor="#FF000000" android:pathData="M360,0H120C58.172,0.066 8.066,50.172 8,112c0.026,26.499 21.501,47.974 48,48v312c0,4.418 3.582,8 8,8h352c4.418,0 8,-3.582 8,-8V160c26.499,-0.026 47.974,-21.501 48,-48C471.934,50.172 421.828,0.066 360,0zM344,152v312H72V152c0,-4.418 -3.582,-8 -8,-8h-8c-17.673,0 -32,-14.327 -32,-32c0.057,-52.996 43.004,-95.943 96,-96h176c52.996,0.057 95.943,43.004 96,96c0,17.673 -14.327,32 -32,32h-8C347.582,144 344,147.582 344,152zM424,144h-8c-4.418,0 -8,3.582 -8,8v88h-32v16h32v16h-32v16h32v144h-32v16h32v16h-48v-48h32v-16h-32v-64h32v-16h-32V208h16v-16h-16v-32c26.499,-0.026 47.974,-21.501 48,-48c-0.007,-10.84 -1.597,-21.62 -4.72,-32H432V64h-34.96c-9.522,-19.938 -24.702,-36.631 -43.648,-48H360c52.996,0.057 95.943,43.004 96,96C456,129.673 441.673,144 424,144z"/>
+</vector>
+
+<!--<div>Icons made by <a href="https://www.flaticon.com/authors/smalllikeart" title="smalllikeart">smalllikeart</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>-->

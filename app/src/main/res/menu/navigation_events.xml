@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/navigation_carbs"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_carbs" />
+        android:icon="@drawable/ic_bread"
+        android:title="@string/title_carbs"/>
+        <!--android:icon="@drawable/ic_carbs"-->
+
 
     <item
         android:id="@+id/navigation_insulin"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_syringe"
         android:title="@string/title_insulin" />
+    <!--android:icon="@drawable/ic_insulin"-->
 
     <item
         android:id="@+id/navigation_exercise"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_weightlifting"
         android:title="@string/title_exercise" />
+    <!--android:icon="@drawable/ic_exercise"-->
 
     <item
         android:id="@+id/navigation_health"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_red_cross"
         android:title="@string/title_health" />
+    <!--android:icon="@drawable/ic_health"-->
 
 </menu>

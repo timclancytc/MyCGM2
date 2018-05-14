@@ -1,0 +1,6 @@
+<vector android:height="24dp" android:viewportHeight="336"
+    android:viewportWidth="336" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M300.76,95.08L300.76,95.08l-60,0v-60C240.651,15.736 224.984,0.087 205.64,0h-75.28c-19.453,0.022 -35.218,15.787 -35.24,35.24v60h-60C15.76,95.328 0.088,111 0,130.36v75.32c0.022,19.453 15.787,35.218 35.24,35.24h60v60c0.109,19.344 15.776,34.993 35.12,35.08h75.28c19.453,-0.022 35.218,-15.787 35.24,-35.24v-60h60c19.344,-0.087 35.011,-15.736 35.12,-35.08v-75.32C336,110.891 320.229,95.102 300.76,95.08z"/>
+</vector>
+
+<!--<div>Icons made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>-->

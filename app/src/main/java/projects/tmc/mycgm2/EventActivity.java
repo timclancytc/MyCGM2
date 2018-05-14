@@ -24,14 +24,16 @@ public class EventActivity extends MainActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_exercise:
-                    updateFragment(CalibrationsFragment.newInstance());
+                    updateFragment(ExerciseFragment.newInstance());
                     return true;
                 case R.id.navigation_carbs:
-                    updateFragment(EventsFragment.newInstance());
+                    updateFragment(CarbFragment.newInstance());
                     return true;
                 case R.id.navigation_insulin:
+                    updateFragment(InsulinFragment.newInstance());
                     return true;
                 case R.id.navigation_health:
+                    updateFragment(HealthFragment.newInstance());
                     return true;
             }
             return false;
@@ -42,8 +44,6 @@ public class EventActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-
-        FragmentManager fm = getSupportFragmentManager();
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
