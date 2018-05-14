@@ -6,5 +6,16 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_calibrations">Calibrations</string>
     <string name="title_events">Events</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_insulin">Insulin</string>
+    <string name="title_activity_calibration">CalibrationActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_egvs">Estimated Glucose Values</string>
+    <string name="glucose_values">Glucose Values</string>
+    <string name="events">Events</string>
+    <string name="welcome_text_view">Welcome to MyCGM! \n
+        Please select which type of action you would like to view:</string>
+    <string name="title_exercise">Exercise</string>
+    <string name="title_carbs">Carbs</string>
+    <string name="title_health">Health</string>
 </resources>

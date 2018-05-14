@@ -24,22 +24,20 @@ import java.util.TimeZone;
 
 import okhttp3.Request;
 
-public class EventsFragment extends Fragment {
-    private static final String EVENT_URL = "https://api.dexcom.com/v1/users/self/events";
+public class EGVSFragment extends Fragment {
+    private static final String EVENT_URL = "https://api.dexcom.com/v1/users/self/egvss";
     private static final String QUESTION_MARK = "?";
     private static final String EQUALS = "=";
     private static final String AMPERSAND = "&";
 
     private ProgressDialog pd;
 
-    private static final String TAG = "EventsFragment";
+    private static final String TAG = "EGVSFragment";
     private RecyclerView mRecyclerView;
-    private List<EventItem> mItems = new ArrayList<>();
+    private List<EGVSItem> mItems = new ArrayList<>();
 
-    private Enum<EventType> mEventTypeEnum;
-
-    public static EventsFragment newInstance() {
-        return new EventsFragment();
+    public static EGVSFragment newInstance() {
+        return new EGVSFragment();
     }
 
     @Override
@@ -52,9 +50,9 @@ public class EventsFragment extends Fragment {
                 Objects.requireNonNull(this.getActivity()).getSharedPreferences("user_info", 0);
         String accessToken = preferences.getString("accessToken", null);
         if (accessToken != null) {
-            String eventsURL = getEventsURL();
-            Request eventsRequest = getEventsRequest(eventsURL, accessToken);
-            new GetEventRequestAsyncTask().execute(eventsRequest);
+            String egvsURL = getEGVSURL();
+            Request egvsRequest = getEGVSRequest(egvsURL, accessToken);
+            new GetEGVSRequestAsyncTask().execute(egvsRequest);
         }
     }
 
@@ -62,9 +60,9 @@ public class EventsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_events, container, false);
+        View view = inflater.inflate(R.layout.fragment_egvs, container, false);
 
-        mRecyclerView = view.findViewById(R.id.event_recycler_view);
+        mRecyclerView = view.findViewById(R.id.egvs_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
@@ -73,9 +71,9 @@ public class EventsFragment extends Fragment {
         return view;
     }
 
-    private Request getEventsRequest(String eventsURL, String accessToken) {
+    private Request getEGVSRequest(String egvsURL, String accessToken) {
         return new Request.Builder()
-                .url(eventsURL)
+                .url(egvsURL)
                 .get()
                 .addHeader("authorization", "Bearer " + accessToken)
                 .build();
@@ -84,58 +82,58 @@ public class EventsFragment extends Fragment {
 
     private void setupAdapter() {
         if (isAdded()) {
-            mRecyclerView.setAdapter(new EventAdapter(mItems));
+            mRecyclerView.setAdapter(new EGVSAdapter(mItems));
         }
     }
 
-    private class EventHolder extends RecyclerView.ViewHolder {
-        private final TextView mEventValueTextView;
-        private final TextView mEventDateTextView;
+    private class EGVSHolder extends RecyclerView.ViewHolder {
+        private final TextView mEGVSValueTextView;
+        private final TextView mEGVSDateTextView;
 
-        EventHolder(View itemView) {
+        EGVSHolder(View itemView) {
             super(itemView);
-            mEventValueTextView = itemView.findViewById(R.id.event_value_text_view);
-            mEventDateTextView = itemView.findViewById(R.id.event_date_text_view);
+            mEGVSValueTextView = itemView.findViewById(R.id.egvs_value_text_view);
+            mEGVSDateTextView = itemView.findViewById(R.id.egvs_date_text_view);
         }
 
-        void bind(EventItem eventItem) {
+        void bind(EGVSItem egvsItem) {
             SimpleDateFormat dateFormat = new SimpleDateFormat(
                     "yyyy-MM-dd'  'HH:mm:ss", Locale.US);
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-            mEventValueTextView.setText(Float.toString(eventItem.getValue()));
-            mEventDateTextView.setText(dateFormat.format(eventItem.getSystemTime()));
+            mEGVSValueTextView.setText(Float.toString(egvsItem.getValue()));
+            mEGVSDateTextView.setText(dateFormat.format(egvsItem.getSystemTime()));
         }
     }
 
-    private class EventAdapter extends RecyclerView.Adapter<EventHolder> {
-        private final List<EventItem> mEventItems;
+    private class EGVSAdapter extends RecyclerView.Adapter<EGVSHolder> {
+        private final List<EGVSItem> mEGVSItems;
 
-        EventAdapter(List<EventItem> eventItems) {
-            mEventItems = eventItems;
+        EGVSAdapter(List<EGVSItem> egvsItems) {
+            mEGVSItems = egvsItems;
         }
 
         @NonNull
         @Override
-        public EventHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public EGVSHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.list_item_event, parent, false);
-            return new EventHolder(view);
+            View view = inflater.inflate(R.layout.list_item_egvs, parent, false);
+            return new EGVSHolder(view);
 
         }
 
         @Override
-        public void onBindViewHolder(@NonNull EventHolder holder, int position) {
-            holder.bind(mEventItems.get(position));
+        public void onBindViewHolder(@NonNull EGVSHolder holder, int position) {
+            holder.bind(mEGVSItems.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return mEventItems.size();
+            return mEGVSItems.size();
         }
     }
 
-    private static String getEventsURL() {
+    private static String getEGVSURL() {
         String startDate = "2018-03-01T08:00:00";
         String endDate = "2018-05-12T08:00:00";
         return  EVENT_URL +
@@ -145,23 +143,23 @@ public class EventsFragment extends Fragment {
                 "endDate=" + endDate;
     }
 
-    private class GetEventRequestAsyncTask extends AsyncTask<Request, Void, List<EventItem>> {
+    private class GetEGVSRequestAsyncTask extends AsyncTask<Request, Void, List<EGVSItem>> {
 
         @Override
         protected void onPreExecute() {
-//            pd = ProgressDialog.show(EventsFragment.this, "",
-//                    EventsFragment.this.getString(R.string.loading), true);
+//            pd = ProgressDialog.show(EGVSsFragment.this, "",
+//                    EGVSsFragment.this.getString(R.string.loading), true);
         }
 
         @Override
-        protected List<EventItem> doInBackground(Request... requests) {
+        protected List<EGVSItem> doInBackground(Request... requests) {
             Request request = requests[0];
-            return new EventFetcher().fetchItems(request);
+            return new EGVSFetcher().fetchItems(request);
         }
 
         @Override
-        protected void onPostExecute(List<EventItem> eventItems) {
-            mItems = eventItems;
+        protected void onPostExecute(List<EGVSItem> egvsItems) {
+            mItems = egvsItems;
             if (pd != null && pd.isShowing()) {
                 pd.dismiss();
             }

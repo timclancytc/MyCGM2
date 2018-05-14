@@ -30,10 +30,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MyCGMActivity extends AppCompatActivity {
+public class AuthActivity extends AppCompatActivity {
 
     //Tag for logs
-    private static final String TAG = "MyCGMActivity";
+    private static final String TAG = "AuthActivity";
 
     /*CONSTANT FOR THE AUTHORIZATION PROCESS*/
 
@@ -49,7 +49,7 @@ public class MyCGMActivity extends AppCompatActivity {
     private static final String REDIRECT_URI = "http://projects.tmc.mycgm.redirecturl";
     /*********************************************/
 
-    //These are constants used for build the urls
+    //These are constants used to build the urls
     private static final String AUTHORIZATION_URL = "https://api.dexcom.com/v1/oauth2/login";
     private static final String ACCESS_TOKEN_URL = "https://api.dexcom.com/v1/oauth2/token";
     private static final String SECRET_KEY_PARAM = "client_secret";
@@ -82,7 +82,7 @@ public class MyCGMActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_cgm);
+        setContentView(R.layout.activity_auth);
 
         //get the webView from the layout
         webView = findViewById(R.id.main_activity_web_view);
@@ -223,7 +223,7 @@ public class MyCGMActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            pd = ProgressDialog.show(MyCGMActivity.this, "", MyCGMActivity.this.getString(R.string.loading), true);
+            pd = ProgressDialog.show(AuthActivity.this, "", AuthActivity.this.getString(R.string.loading), true);
         }
 
         @Override
@@ -262,7 +262,7 @@ public class MyCGMActivity extends AppCompatActivity {
                             long expireDate = calendar.getTimeInMillis();
 
                             ////Store both expires in and access token in shared preferences
-                            SharedPreferences preferences = MyCGMActivity.this.getSharedPreferences("user_info", 0);
+                            SharedPreferences preferences = AuthActivity.this.getSharedPreferences("user_info", 0);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putLong("expires", expireDate);
                             editor.putString("accessToken", accessToken);
@@ -290,8 +290,8 @@ public class MyCGMActivity extends AppCompatActivity {
             }
             if (status) {
                 //If everything went Ok, change to another activity.
-                Intent startMainActivity = new Intent(MyCGMActivity.this, MainActivity.class);
-                MyCGMActivity.this.startActivity(startMainActivity);
+                Intent startMainActivity = new Intent(AuthActivity.this, MainActivity.class);
+                AuthActivity.this.startActivity(startMainActivity);
             }
         }
 
