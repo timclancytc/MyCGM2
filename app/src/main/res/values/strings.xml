@@ -2,14 +2,11 @@
     <string name="app_name">MyCGM</string>
     <string name="action_settings">Settings</string>
     <string name="loading">Loading &#8230;</string>
-    <string name="welcome_text">Welcome %1$s %2$s, You are a %3$s</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_calibrations">Calibrations</string>
     <string name="title_events">Events</string>
     <string name="title_insulin">Insulin</string>
     <string name="title_activity_calibration">CalibrationActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
     <string name="title_egvs">Estimated Glucose Values</string>
     <string name="glucose_values">Glucose Values</string>
     <string name="events">Events</string>
@@ -18,4 +15,5 @@
     <string name="title_exercise">Exercise</string>
     <string name="title_carbs">Carbs</string>
     <string name="title_health">Health</string>
+    <string name="title_glucose">Glucose</string>
 </resources>

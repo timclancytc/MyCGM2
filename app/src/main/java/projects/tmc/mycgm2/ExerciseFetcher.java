@@ -1,7 +1,5 @@
 package projects.tmc.mycgm2;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,8 +19,6 @@ import okhttp3.Response;
 
 class ExerciseFetcher {
 
-    private static final String TAG = "ExerciseFetcher";
-
     public List<EventItem> fetchItems(Request request) {
         List<EventItem> items = new ArrayList<>();
         OkHttpClient httpClient = new OkHttpClient();
@@ -34,28 +30,18 @@ class ExerciseFetcher {
                 if (response.isSuccessful()) {
                     String result = Objects.requireNonNull(response.body()).string();
 
-                    Log.i(TAG, "resultString in try: " + result);
                     JSONObject jsonBody = new JSONObject(result);
                     exerciseParser(items, jsonBody);
                 }
             }
-        } catch (IOException e) {
-            Log.e(TAG, "IO Exception:" + e.getLocalizedMessage());
-            e.printStackTrace();
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception " + e.getLocalizedMessage());
-            e.printStackTrace();
-        } catch (ParseException e) {
-            Log.e(TAG, "Parse Exception " + e.getLocalizedMessage());
+        } catch (IOException | JSONException | ParseException e) {
             e.printStackTrace();
         }
         return items;
     }
 
-    public void exerciseParser(List<EventItem> items, JSONObject jsonBody)
+    private void exerciseParser(List<EventItem> items, JSONObject jsonBody)
             throws JSONException, ParseException {
-
-        Log.i(TAG, "JSON String:" + jsonBody);
 
         JSONArray exerciseJsonArray = jsonBody.getJSONArray("events");
         SimpleDateFormat simpleDateFormat =

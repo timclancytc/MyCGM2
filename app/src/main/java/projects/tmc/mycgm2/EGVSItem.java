@@ -19,6 +19,7 @@ class EGVSItem {
         mSystemTime = systemTime;
     }
 
+    @SuppressWarnings("unused")
     public Date getDisplayTime() {
         return mDisplayTime;
     }
@@ -43,6 +44,7 @@ class EGVSItem {
         mStatus = status;
     }
 
+    @SuppressWarnings("unused")
     public String getTrend() {
         return mTrend;
     }
@@ -51,10 +53,12 @@ class EGVSItem {
         mTrend = trend;
     }
 
+    @SuppressWarnings("unused")
     public float getTrendRate() {
         return mTrendRate;
     }
 
+    @SuppressWarnings("unused")
     public void setTrendRate(float trendRate) {
         mTrendRate = trendRate;
     }

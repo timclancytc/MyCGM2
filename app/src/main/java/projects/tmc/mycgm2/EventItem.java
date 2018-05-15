@@ -2,6 +2,7 @@ package projects.tmc.mycgm2;
 
 import java.util.Date;
 
+@SuppressWarnings("unused")
 class EventItem {
 
     private Date mSystemTime;

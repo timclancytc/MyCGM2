@@ -1,43 +1,31 @@
 package projects.tmc.mycgm2;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Button mGlucoseButton;
-    private Button mEventsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mGlucoseButton = findViewById(R.id.glucose_button);
-        mGlucoseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v){
-                Intent startGlucoseActivity = new Intent(MainActivity.this, GlucoseActivity.class);
-                MainActivity.this.startActivity(startGlucoseActivity);
-            }
+        Button glucoseButton = findViewById(R.id.glucose_button);
+        glucoseButton.setOnClickListener(v -> {
+            Intent startGlucoseActivity = new Intent(MainActivity.this, GlucoseActivity.class);
+            MainActivity.this.startActivity(startGlucoseActivity);
         });
 
 
-        mEventsButton = findViewById(R.id.events_button);
-        mEventsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v){
-                Intent startEventActivity = new Intent(MainActivity.this, EventActivity.class);
-                MainActivity.this.startActivity(startEventActivity);
-            }
+        Button eventsButton = findViewById(R.id.events_button);
+        eventsButton.setOnClickListener(v -> {
+            Intent startEventActivity = new Intent(MainActivity.this, EventActivity.class);
+            MainActivity.this.startActivity(startEventActivity);
         });
 
 

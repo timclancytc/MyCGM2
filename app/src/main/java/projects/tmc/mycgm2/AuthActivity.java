@@ -17,7 +17,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -31,9 +30,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AuthActivity extends AppCompatActivity {
-
-    //Tag for logs
-    private static final String TAG = "AuthActivity";
 
     /*CONSTANT FOR THE AUTHORIZATION PROCESS*/
 
@@ -63,9 +59,6 @@ public class AuthActivity extends AppCompatActivity {
     private static final String RESPONSE_TYPE_VALUE = "code";
     private static final String SCOPE_VALUE = "offline_access";
 
-    private static final String GRANT_TYPE_PARAM = "grant_type";
-    private static final String GRANT_TYPE = "authorization_code";
-
 
     /*---------------------------------------*/
     private static final String QUESTION_MARK = "?";
@@ -79,8 +72,6 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
@@ -112,35 +103,28 @@ public class AuthActivity extends AppCompatActivity {
                 //This method will be called when the Auth proccess redirect to our RedirectUri.
                 //We will check the url looking for our RedirectUri.
                 if (authorizationUrl.startsWith(REDIRECT_URI)) {
-                    Log.i(TAG, "Authorize/Authorization starts with redirect_uri");
-                    Log.i(TAG, "Authorize/authorizationUrl:" + authorizationUrl);
                     Uri uri = Uri.parse(authorizationUrl);
                     //We take from the url the authorizationToken and the state token. We have to check that the state token returned by the Service is the same we sent.
                     //If not, that means the request may be a result of CSRF and must be rejected.
                     String stateToken = uri.getQueryParameter(STATE_PARAM);
                     if (stateToken == null || !stateToken.equals(STATE)) {
-                        Log.e(TAG, "Authorize/State token doesn't match");
                         return true;
                     }
 
                     //If the user doesn't allow authorization to our application, the authorizationToken Will be null.
                     String authorizationToken = uri.getQueryParameter(RESPONSE_TYPE_VALUE);
                     if (authorizationToken == null) {
-                        Log.i("Authorize", "The user doesn't allow authorization.");
                         return true;
                     }
-                    Log.i("Authorize", "Auth token received: " + authorizationToken);
 
                     //Generate URL for requesting Access Token
                     Request accessTokenRequest = getAccessTokenRequest(authorizationToken);
 
-                    Log.i(TAG, "Authorize/accessTokenRequest: " + accessTokenRequest.toString());
                     //We make the request in a AsyncTask
                     new PostRequestAsyncTask().execute(accessTokenRequest);
 
                 } else {
                     //Default behaviour
-                    Log.i("Authorize", "Redirecting to: " + authorizationUrl);
                     webView.loadUrl(authorizationUrl);
                 }
                 return true;
@@ -149,28 +133,8 @@ public class AuthActivity extends AppCompatActivity {
 
         //Get the authorization Url
         String authUrl = getAuthorizationUrl();
-        Log.i("Authorize", "Loading Auth Url: " + authUrl);
         //Load the authorization URL into the webView
         webView.loadUrl(authUrl);
-    }
-
-    /**
-     * Method that generates the url for get the access token from the Service
-     *
-     * @return Url
-     */
-    private static String getAccessTokenUrl(String authorizationToken) {
-        return ACCESS_TOKEN_URL
-                + QUESTION_MARK
-                + GRANT_TYPE_PARAM + EQUALS + GRANT_TYPE
-                + AMPERSAND
-                + RESPONSE_TYPE_VALUE + EQUALS + authorizationToken
-                + AMPERSAND
-                + CLIENT_ID_PARAM + EQUALS + API_KEY
-                + AMPERSAND
-                + REDIRECT_URI_PARAM + EQUALS + REDIRECT_URI
-                + AMPERSAND
-                + SECRET_KEY_PARAM + EQUALS + SECRET_KEY;
     }
 
     /**
@@ -217,6 +181,7 @@ public class AuthActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class PostRequestAsyncTask extends AsyncTask<Request, Void, Boolean> {
 
 
@@ -228,11 +193,8 @@ public class AuthActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Request... requests) {
-            Log.i(TAG, "PostRequestAsyncTask/doInBackground");
 
             Request request = requests[0];
-
-            Log.i(TAG, "Request: " + request.toString());
 
             OkHttpClient httpClient = new OkHttpClient();
 
@@ -241,12 +203,10 @@ public class AuthActivity extends AppCompatActivity {
                 if (response != null) {
                     //If status is OK 200
                     if (response.isSuccessful()) {
-                        Log.i(TAG, "Authorize/response is successful");
-                        Log.i(TAG, "Authorize/response is successful second");
 
+                        //noinspection ConstantConditions
                         String result = response.body().string();
 
-                        Log.i(TAG, "Authorize/result: " + result);
                         //Convert the string result to a JSON Object
                         JSONObject resultJson = new JSONObject(result);
                         //Extract data from JSON Response
@@ -254,7 +214,6 @@ public class AuthActivity extends AppCompatActivity {
                         String accessToken = resultJson.has("access_token") ? resultJson.getString("access_token") : null;
 
                         if (expiresIn > 0 && accessToken != null) {
-                            Log.i("Authorize", "This is the access Token: " + accessToken + ". It will expires in " + expiresIn + " secs");
 
                             //Calculate date of expiration
                             Calendar calendar = Calendar.getInstance();
@@ -272,12 +231,8 @@ public class AuthActivity extends AppCompatActivity {
                         }
                     }
                 }
-            } catch (IOException e) {
-                Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
-            } catch (ParseException e) {
-                Log.e("Authorize", "Error Parsing Http response " + e.getLocalizedMessage());
-            } catch (JSONException e) {
-                Log.e("Authorize", "Error with Http response " + e.getLocalizedMessage());
+            } catch (IOException | ParseException | JSONException e) {
+                e.printStackTrace();
             }
 
             return false;

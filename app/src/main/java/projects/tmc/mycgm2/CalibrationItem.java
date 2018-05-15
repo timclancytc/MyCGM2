@@ -2,6 +2,7 @@ package projects.tmc.mycgm2;
 
 import java.util.Date;
 
+@SuppressWarnings("unused")
 class CalibrationItem {
 
     private Date mSystemTime;

@@ -9,12 +9,12 @@
 
     <item
         android:id="@+id/action_goto_glucose"
-        android:title="Glucose"
+        android:title="@string/title_glucose"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_goto_events"
-        android:title="Events"
+        android:title="@string/title_events"
         app:showAsAction="never" />
 
 </menu>

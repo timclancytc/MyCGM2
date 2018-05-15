@@ -1,5 +1,6 @@
 package projects.tmc.mycgm2;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -24,20 +27,19 @@ import java.util.TimeZone;
 
 import okhttp3.Request;
 
+@SuppressWarnings("unused")
 public class EventsFragment extends Fragment {
     private static final String EVENT_URL = "https://api.dexcom.com/v1/users/self/events";
     private static final String QUESTION_MARK = "?";
-    private static final String EQUALS = "=";
     private static final String AMPERSAND = "&";
 
+    @SuppressWarnings("unused")
     private ProgressDialog pd;
 
-    private static final String TAG = "EventsFragment";
     private RecyclerView mRecyclerView;
     private List<EventItem> mItems = new ArrayList<>();
 
-    private Enum<EventType> mEventTypeEnum;
-
+    @SuppressWarnings("unused")
     public static EventsFragment newInstance() {
         return new EventsFragment();
     }
@@ -92,6 +94,7 @@ public class EventsFragment extends Fragment {
         private final TextView mEventValueTextView;
         private final TextView mEventDateTextView;
 
+        @SuppressWarnings("unused")
         EventHolder(View itemView) {
             super(itemView);
             mEventValueTextView = itemView.findViewById(R.id.event_value_text_view);
@@ -103,7 +106,7 @@ public class EventsFragment extends Fragment {
                     "yyyy-MM-dd'  'HH:mm:ss", Locale.US);
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-            mEventValueTextView.setText(Float.toString(eventItem.getValue()));
+            mEventValueTextView.setText(String.valueOf(eventItem.getValue()));
             mEventDateTextView.setText(dateFormat.format(eventItem.getSystemTime()));
         }
     }
@@ -135,22 +138,28 @@ public class EventsFragment extends Fragment {
         }
     }
 
-    private static String getEventsURL() {
-        String startDate = "2018-03-01T08:00:00";
-        String endDate = "2018-05-12T08:00:00";
-        return  EVENT_URL +
+    private String getEventsURL() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -90);
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        Date endDate = new Date();
+        String startDateString = sf.format(new Date(cal.getTimeInMillis()));
+        String endDateString = sf.format(endDate);
+        return EVENT_URL +
                 QUESTION_MARK +
-                "startDate=" + startDate +
+                "startDate=" + startDateString +
                 AMPERSAND +
-                "endDate=" + endDate;
+                "endDate=" + endDateString;
     }
 
+    @SuppressWarnings("unused")
+    @SuppressLint("StaticFieldLeak")
     private class GetEventRequestAsyncTask extends AsyncTask<Request, Void, List<EventItem>> {
 
         @Override
         protected void onPreExecute() {
-//            pd = ProgressDialog.show(EventsFragment.this, "",
-//                    EventsFragment.this.getString(R.string.loading), true);
+            pd = ProgressDialog.show(getActivity(), "",
+                    EventsFragment.this.getString(R.string.loading), true);
         }
 
         @Override
