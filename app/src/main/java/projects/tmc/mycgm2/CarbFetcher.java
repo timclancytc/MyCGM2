@@ -65,7 +65,8 @@ class CarbFetcher {
 
             item.setEventType(carbJsonObject.getString("eventType"));
             item.setEventSubType(carbJsonObject.getString("eventSubType"));
-            item.setValue(carbJsonObject.getInt("value"));
+            String valueString = carbJsonObject.getString("value");
+            item.setValue(!valueString.equals("null") ? Integer.valueOf(valueString) : 0);
             item.setUnit(carbJsonObject.getString("unit"));
 
 

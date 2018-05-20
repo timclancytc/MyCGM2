@@ -1,6 +1,7 @@
 package projects.tmc.mycgm2;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class InsulinFragment extends Fragment {
     private static final String QUESTION_MARK = "?";
     private static final String AMPERSAND = "&";
 
+    private ProgressDialog pd;
     private RecyclerView mRecyclerView;
     private List<EventItem> mItems = new ArrayList<>();
 
@@ -150,8 +152,8 @@ public class InsulinFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-//            pd = ProgressDialog.show(InsulinFragment.this, "",
-//                    InsulinFragment.this.getString(R.string.loading), true);
+            pd = ProgressDialog.show(getActivity(), "",
+                    InsulinFragment.this.getString(R.string.loading), true);
         }
 
         @Override
@@ -163,7 +165,9 @@ public class InsulinFragment extends Fragment {
         @Override
         protected void onPostExecute(List<EventItem> insulinItems) {
             mItems = insulinItems;
-
+            if (pd != null && pd.isShowing()) {
+                pd.dismiss();
+            }
             setupAdapter();
         }
     }

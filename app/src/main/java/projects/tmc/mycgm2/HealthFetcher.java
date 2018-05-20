@@ -65,7 +65,8 @@ class HealthFetcher {
             item.setEventType(healthJsonObject.getString("eventType"));
             item.setEventSubType(healthJsonObject.getString("eventSubType"));
             item.setUnit(healthJsonObject.getString("unit"));
-            item.setValue(healthJsonObject.getInt("value"));
+            String valueString = healthJsonObject.getString("value");
+            item.setValue(!valueString.equals("null") ? Integer.valueOf(valueString) : 0);
 
             if (item.getEventType().equals("health")) {
                 items.add(item);

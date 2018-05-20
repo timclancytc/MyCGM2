@@ -65,7 +65,8 @@ class InsulinFetcher {
             item.setEventType(insulinJsonObject.getString("eventType"));
             item.setEventSubType(insulinJsonObject.getString("eventSubType"));
             item.setUnit(insulinJsonObject.getString("unit"));
-            item.setValue(insulinJsonObject.getInt("value"));
+            String valueString = insulinJsonObject.getString("value");
+            item.setValue(!valueString.equals("null") ? Integer.valueOf(valueString) : 0);
 
             if (item.getEventType().equals("insulin")) {
                 items.add(item);

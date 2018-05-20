@@ -65,7 +65,8 @@ class ExerciseFetcher {
             item.setEventType(exerciseJsonObject.getString("eventType"));
             item.setEventSubType(exerciseJsonObject.getString("eventSubType"));
             item.setUnit(exerciseJsonObject.getString("unit"));
-            item.setValue(exerciseJsonObject.getInt("value"));
+            String valueString = exerciseJsonObject.getString("value");
+            item.setValue(!valueString.equals("null") ? Integer.valueOf(valueString) : 0);
 
             if (item.getEventType().equals("exercise")) {
                 items.add(item);
