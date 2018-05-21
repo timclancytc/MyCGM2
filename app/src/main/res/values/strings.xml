@@ -16,4 +16,5 @@
     <string name="title_carbs">Carbs</string>
     <string name="title_health">Health</string>
     <string name="title_glucose">Glucose</string>
+    <string name="refresh_button">Refresh</string>
 </resources>

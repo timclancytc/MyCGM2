@@ -1,8 +1,8 @@
-package projects.tmc.mycgm2;
+package projects.tmc.mycgm2.Items;
 
 import java.util.Date;
 
-class EGVSItem {
+public class EGVSItem {
 
     private Date mSystemTime;
     private Date mDisplayTime;

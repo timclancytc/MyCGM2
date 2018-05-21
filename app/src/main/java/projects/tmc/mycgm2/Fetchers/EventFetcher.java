@@ -1,4 +1,4 @@
-package projects.tmc.mycgm2;
+package projects.tmc.mycgm2.Fetchers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,11 +16,12 @@ import java.util.Objects;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import projects.tmc.mycgm2.Items.EventItem;
 
-class EGVSFetcher {
+public class EventFetcher {
 
-    public List<EGVSItem> fetchItems(Request request) {
-        List<EGVSItem> items = new ArrayList<>();
+    public List<EventItem> fetchItems(Request request) {
+        List<EventItem> items = new ArrayList<>();
         OkHttpClient httpClient = new OkHttpClient();
 
         try {
@@ -31,7 +32,7 @@ class EGVSFetcher {
                     String result = Objects.requireNonNull(response.body()).string();
 
                     JSONObject jsonBody = new JSONObject(result);
-                    egvsParser(items, jsonBody);
+                    eventsParser(items, jsonBody);
                 }
             }
         } catch (IOException | JSONException | ParseException e) {
@@ -40,34 +41,33 @@ class EGVSFetcher {
         return items;
     }
 
-    private void egvsParser(List<EGVSItem> items, JSONObject jsonBody)
+
+    private void eventsParser(List<EventItem> items, JSONObject jsonBody)
             throws JSONException, ParseException {
 
-        JSONArray egvsJsonArray = jsonBody.getJSONArray("egvs");
+        JSONArray eventsJsonArray = jsonBody.getJSONArray("events");
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.US);
 
-        for (int i = 0; i < egvsJsonArray.length(); i++) {
-            JSONObject egvsJsonObject = egvsJsonArray.getJSONObject(i);
+        for (int i = 0; i < eventsJsonArray.length(); i++) {
+            JSONObject eventJsonObject = eventsJsonArray.getJSONObject(i);
 
-            EGVSItem item = new EGVSItem();
+            EventItem item = new EventItem();
 
-            String systemDateString = egvsJsonObject.getString("systemTime");
+            String systemDateString = eventJsonObject.getString("systemTime");
             Date date = simpleDateFormat.parse(systemDateString);
             item.setSystemTime(date);
+
 
             //Display date is saved as the current time on the system when the reading is entered
             //There is therefore no way to convert it, since it can't be known which timezone it was
             //entered in...
-            String displayDateString = egvsJsonObject.getString("displayTime");
+            String displayDateString = eventJsonObject.getString("displayTime");
             date = simpleDateFormat.parse(displayDateString);
             item.setDisplayTime(date);
 
-            item.setValue(egvsJsonObject.getInt("value"));
-
-            item.setStatus(egvsJsonObject.getString("status"));
-            item.setTrend(egvsJsonObject.getString("trend"));
-            item.setValue(egvsJsonObject.getInt("trendRate"));
+            item.setUnit(eventJsonObject.getString("unit"));
+            item.setValue(eventJsonObject.getInt("value"));
 
             items.add(item);
         }

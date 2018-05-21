@@ -1,4 +1,4 @@
-package projects.tmc.mycgm2;
+package projects.tmc.mycgm2.Fetchers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,11 +16,12 @@ import java.util.Objects;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import projects.tmc.mycgm2.Items.CalibrationItem;
 
-class HealthFetcher {
+public class CalibrationFetcher {
 
-    public List<EventItem> fetchItems(Request request) {
-        List<EventItem> items = new ArrayList<>();
+    public List<CalibrationItem> fetchItems(Request request) {
+        List<CalibrationItem> items = new ArrayList<>();
         OkHttpClient httpClient = new OkHttpClient();
 
         try {
@@ -29,8 +30,9 @@ class HealthFetcher {
                 //If status is OK 200
                 if (response.isSuccessful()) {
                     String result = Objects.requireNonNull(response.body()).string();
+
                     JSONObject jsonBody = new JSONObject(result);
-                    healthParser(items, jsonBody);
+                    calibrationsParser(items, jsonBody);
                 }
             }
         } catch (IOException | JSONException | ParseException e) {
@@ -39,38 +41,33 @@ class HealthFetcher {
         return items;
     }
 
-    private void healthParser(List<EventItem> items, JSONObject jsonBody)
+    public void calibrationsParser(List<CalibrationItem> items, JSONObject jsonBody)
             throws JSONException, ParseException {
 
-        JSONArray healthJsonArray = jsonBody.getJSONArray("events");
+        JSONArray calibrationsJsonArray = jsonBody.getJSONArray("calibrations");
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.US);
 
-        for (int i = 0; i < healthJsonArray.length(); i++) {
-            JSONObject healthJsonObject = healthJsonArray.getJSONObject(i);
+        for (int i = 0; i < calibrationsJsonArray.length(); i++) {
+            JSONObject calibrationJsonObject = calibrationsJsonArray.getJSONObject(i);
 
-            EventItem item = new EventItem();
+            CalibrationItem item = new CalibrationItem();
 
-            String systemDateString = healthJsonObject.getString("systemTime");
+            String systemDateString = calibrationJsonObject.getString("systemTime");
             Date date = simpleDateFormat.parse(systemDateString);
             item.setSystemTime(date);
 
             //Display date is saved as the current time on the system when the reading is entered
             //There is therefore no way to convert it, since it can't be known which timezone it was
             //entered in...
-            String displayDateString = healthJsonObject.getString("displayTime");
+            String displayDateString = calibrationJsonObject.getString("displayTime");
             date = simpleDateFormat.parse(displayDateString);
             item.setDisplayTime(date);
 
-            item.setEventType(healthJsonObject.getString("eventType"));
-            item.setEventSubType(healthJsonObject.getString("eventSubType"));
-            item.setUnit(healthJsonObject.getString("unit"));
-            String valueString = healthJsonObject.getString("value");
-            item.setValue(!valueString.equals("null") ? Integer.valueOf(valueString) : 0);
+            item.setUnit(calibrationJsonObject.getString("unit"));
+            item.setValue(calibrationJsonObject.getInt("value"));
 
-            if (item.getEventType().equals("health")) {
-                items.add(item);
-            }
+            items.add(item);
         }
     }
 }

@@ -26,8 +26,13 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import okhttp3.Request;
+import projects.tmc.mycgm2.Fetchers.CalibrationFetcher;
+import projects.tmc.mycgm2.Items.CalibrationItem;
+import projects.tmc.mycgm2.Items.EGVSItem;
+import projects.tmc.mycgm2.Items.EventItem;
 
-public class CalibrationsFragment extends Fragment {
+public class CalibrationsFragment extends Fragment
+        implements MyCGMLab.OnRefreshItemsListener {
     private static final String CALIBRATIONS_URL = "https://api.dexcom.com/v1/users/self/calibrations";
     private static final String QUESTION_MARK = "?";
     private static final String AMPERSAND = "&";
@@ -35,6 +40,7 @@ public class CalibrationsFragment extends Fragment {
     private ProgressDialog pd;
 
     private RecyclerView mRecyclerView;
+    private MyCGMLab mMyCGMLab = MyCGMLab.get();
     private List<CalibrationItem> mItems = new ArrayList<>();
 
     public static CalibrationsFragment newInstance() {
@@ -54,6 +60,10 @@ public class CalibrationsFragment extends Fragment {
             String calibrationsURL = getCalibrationsURL();
             Request calibrationsRequest = getCalibrationsRequest(calibrationsURL, accessToken);
             new GetCalibrationRequestAsyncTask().execute(calibrationsRequest);
+        }
+
+        if (!mMyCGMLab.hasCalibrationItems()) {
+            mMyCGMLab.refreshItems(this);
         }
     }
 
@@ -83,8 +93,15 @@ public class CalibrationsFragment extends Fragment {
 
     private void setupAdapter() {
         if (isAdded()) {
-            mRecyclerView.setAdapter(new CalibrationAdapter(mItems));
+            mRecyclerView.setAdapter(new CalibrationAdapter(mMyCGMLab.getCalibrationItems()));
         }
+    }
+
+    @Override
+    public void onRefreshItems(List<EventItem> eventItems,
+                               List<CalibrationItem> calibrationItems,
+                               List<EGVSItem> egvsItems) {
+        setupAdapter();
     }
 
     private class CalibrationHolder extends RecyclerView.ViewHolder {
@@ -141,7 +158,7 @@ public class CalibrationsFragment extends Fragment {
         Date endDate = new Date();
         String startDateString = sf.format(new Date(cal.getTimeInMillis()));
         String endDateString = sf.format(endDate);
-        return  CALIBRATIONS_URL +
+        return CALIBRATIONS_URL +
                 QUESTION_MARK +
                 "startDate=" + startDateString +
                 AMPERSAND +

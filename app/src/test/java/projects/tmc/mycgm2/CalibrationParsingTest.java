@@ -12,6 +12,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import projects.tmc.mycgm2.Fetchers.CalibrationFetcher;
+import projects.tmc.mycgm2.Items.CalibrationItem;
+
 import static org.junit.Assert.assertEquals;
 
 public class CalibrationParsingTest {

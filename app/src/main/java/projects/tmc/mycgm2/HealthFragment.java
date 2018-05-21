@@ -26,6 +26,8 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import okhttp3.Request;
+import projects.tmc.mycgm2.Fetchers.HealthFetcher;
+import projects.tmc.mycgm2.Items.EventItem;
 
 public class HealthFragment extends Fragment {
     private static final String EVENTS_URL = "https://api.dexcom.com/v1/users/self/events";

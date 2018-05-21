@@ -1,4 +1,4 @@
-package projects.tmc.mycgm2;
+package projects.tmc.mycgm2.Fetchers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,8 +16,9 @@ import java.util.Objects;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import projects.tmc.mycgm2.Items.EventItem;
 
-class EventFetcher {
+public class CarbFetcher {
 
     public List<EventItem> fetchItems(Request request) {
         List<EventItem> items = new ArrayList<>();
@@ -31,7 +32,7 @@ class EventFetcher {
                     String result = Objects.requireNonNull(response.body()).string();
 
                     JSONObject jsonBody = new JSONObject(result);
-                    eventsParser(items, jsonBody);
+                    carbParser(items, jsonBody);
                 }
             }
         } catch (IOException | JSONException | ParseException e) {
@@ -40,35 +41,40 @@ class EventFetcher {
         return items;
     }
 
-
-    private void eventsParser(List<EventItem> items, JSONObject jsonBody)
+    private void carbParser(List<EventItem> items, JSONObject jsonBody)
             throws JSONException, ParseException {
 
-        JSONArray eventsJsonArray = jsonBody.getJSONArray("events");
+        JSONArray carbJsonArray = jsonBody.getJSONArray("events");
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.US);
 
-        for (int i = 0; i < eventsJsonArray.length(); i++) {
-            JSONObject eventJsonObject = eventsJsonArray.getJSONObject(i);
+        for (int i = 0; i < carbJsonArray.length(); i++) {
+            JSONObject carbJsonObject = carbJsonArray.getJSONObject(i);
 
             EventItem item = new EventItem();
 
-            String systemDateString = eventJsonObject.getString("systemTime");
+            String systemDateString = carbJsonObject.getString("systemTime");
             Date date = simpleDateFormat.parse(systemDateString);
             item.setSystemTime(date);
-
 
             //Display date is saved as the current time on the system when the reading is entered
             //There is therefore no way to convert it, since it can't be known which timezone it was
             //entered in...
-            String displayDateString = eventJsonObject.getString("displayTime");
+            String displayDateString = carbJsonObject.getString("displayTime");
             date = simpleDateFormat.parse(displayDateString);
             item.setDisplayTime(date);
 
-            item.setUnit(eventJsonObject.getString("unit"));
-            item.setValue(eventJsonObject.getInt("value"));
+            item.setEventType(carbJsonObject.getString("eventType"));
+            item.setEventSubType(carbJsonObject.getString("eventSubType"));
+            String valueString = carbJsonObject.getString("value");
+            item.setValue(!valueString.equals("null") ? Integer.valueOf(valueString) : 0);
+            item.setUnit(carbJsonObject.getString("unit"));
 
-            items.add(item);
+
+            if (item.getEventType().equals("carbs")) {
+                items.add(item);
+            }
+
         }
     }
 }

@@ -40,11 +40,4 @@ public class EventActivity extends MainActivity {
 
     }
 
-    private void updateFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
-    }
-
 }

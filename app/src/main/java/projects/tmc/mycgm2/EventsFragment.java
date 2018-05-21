@@ -26,6 +26,8 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import okhttp3.Request;
+import projects.tmc.mycgm2.Fetchers.EventFetcher;
+import projects.tmc.mycgm2.Items.EventItem;
 
 @SuppressWarnings("unused")
 public class EventsFragment extends Fragment {

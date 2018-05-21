@@ -8,6 +8,14 @@
         <!--app:showAsAction="never" />-->
 
     <item
+        android:id="@+id/action_refresh"
+        android:enabled="true"
+        android:icon="@android:drawable/stat_notify_sync_noanim"
+        app:showAsAction="ifRoom"
+        android:title="@string/refresh_button"
+        />
+
+    <item
         android:id="@+id/action_goto_glucose"
         android:title="@string/title_glucose"
         app:showAsAction="never" />

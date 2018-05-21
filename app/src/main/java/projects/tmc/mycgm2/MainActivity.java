@@ -1,6 +1,7 @@
 package projects.tmc.mycgm2;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Fragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +57,21 @@ public class MainActivity extends AppCompatActivity {
                 Intent startGlucoseActivity = new Intent(MainActivity.this, GlucoseActivity.class);
                 MainActivity.this.startActivity(startGlucoseActivity);
                 return true;
+            case R.id.action_refresh:
+                MyCGMLab.get().refreshItems(
+                        (MyCGMLab.OnRefreshItemsListener) mFragment
+                );
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    protected void updateFragment(Fragment fragment) {
+        mFragment = fragment;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 }

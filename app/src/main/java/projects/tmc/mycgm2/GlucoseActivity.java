@@ -29,11 +29,5 @@ public class GlucoseActivity extends MainActivity {
         navigation.setSelectedItemId(R.id.navigation_glucose_calibrations);
     }
 
-    private void updateFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container_glucose, fragment)
-                .commit();
-    }
 
 }

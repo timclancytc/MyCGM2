@@ -1,9 +1,9 @@
-package projects.tmc.mycgm2;
+package projects.tmc.mycgm2.Items;
 
 import java.util.Date;
 
 @SuppressWarnings("unused")
-class EventItem {
+public class EventItem {
 
     private Date mSystemTime;
     private Date mDisplayTime;

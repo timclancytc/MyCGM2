@@ -26,6 +26,8 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import okhttp3.Request;
+import projects.tmc.mycgm2.Fetchers.EGVSFetcher;
+import projects.tmc.mycgm2.Items.EGVSItem;
 
 public class EGVSFragment extends Fragment {
     private static final String EGVS_URL = "https://api.dexcom.com/v1/users/self/egvs";
